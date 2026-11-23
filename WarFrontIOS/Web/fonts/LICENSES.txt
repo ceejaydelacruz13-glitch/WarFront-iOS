@@ -1,0 +1,5 @@
+The typeface shipped with WarFront, under the SIL Open Font License 1.1
+(https://openfontlicense.org), which allows bundling it with a commercial
+game as long as this notice stays with it.
+
+Do Hyeon               Copyright 2018 The Do Hyeon Project Authors   github.com/google/fonts/tree/main/ofl/dohyeon

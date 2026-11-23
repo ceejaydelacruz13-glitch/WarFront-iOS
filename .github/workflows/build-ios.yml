@@ -1,0 +1,33 @@
+name: Build WarFront iOS (unsigned)
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Compile unsigned iOS app
+        run: |
+          set -o pipefail
+          xcodebuild -project WarFrontIOS.xcodeproj -scheme WarFrontIOS \
+            -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            CODE_SIGNING_ALLOWED=NO build | tail -80
+      - name: Package unsigned IPA (requires signing before installation)
+        run: |
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          cp -R "$RUNNER_TEMP/DerivedData/Build/Products/Release-iphoneos/WarFront.app" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          zip -qr "$GITHUB_WORKSPACE/WarFront-unsigned.ipa" Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WarFront-iOS-unsigned-IPA
+          path: WarFront-unsigned.ipa
+          retention-days: 7

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head><script>
+try {
+  const ratio = Math.min(window.devicePixelRatio || 1, 1);
+  Object.defineProperty(window, 'devicePixelRatio', {get: () => ratio});
+} catch (_) {}
+(() => {
+  const sheets = new Set(["/tiles/buildings-top.png"]);
+  const proto = HTMLImageElement.prototype;
+  const src = Object.getOwnPropertyDescriptor(proto, 'src');
+  const scaled = new WeakSet();
+  Object.defineProperty(proto, 'src', {...src, set(value) {
+    const url = new URL(value, document.baseURI);
+    if (url.origin === location.origin && sheets.has(url.pathname)) {
+      scaled.add(this);
+      url.pathname = '/mobile' + url.pathname;
+      src.set.call(this, url.href);
+    } else {
+      scaled.delete(this);
+      src.set.call(this, value);
+    }
+  }});
+  for (const prop of ['naturalWidth', 'naturalHeight']) {
+    const spec = Object.getOwnPropertyDescriptor(proto, prop);
+    Object.defineProperty(proto, prop, {...spec, get() {
+      return spec.get.call(this) * (scaled.has(this) ? 4 : 1);
+    }});
+  }
+  const context = CanvasRenderingContext2D.prototype;
+  const draw = context.drawImage;
+  context.drawImage = function(image, ...args) {
+    if (scaled.has(image)) {
+      if (args.length === 8) {
+        for (let i = 0; i < 4; i++) args[i] /= 4;
+      } else if (args.length === 2) {
+        args.push(image.naturalWidth, image.naturalHeight);
+      }
+    }
+    return draw.call(this, image, ...args);
+  };
+})();
+function reportGameError(message) {
+  if (!document.body || document.getElementById('warfront-error')) return;
+  const box = document.createElement('pre');
+  box.id = 'warfront-error';
+  box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#211;color:white;padding:10px;white-space:pre-wrap;z-index:2147483647;pointer-events:none';
+  box.textContent = String(message).slice(0, 500);
+  document.body.appendChild(box);
+}
+window.addEventListener('error', e => { if (e.message) reportGameError(e.message); });
+window.addEventListener('unhandledrejection', e => reportGameError(e.reason));
+</script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, viewport-fit=cover, user-scalable=no" />
+    <title>WarFront</title>
+    <!-- The game's one face, fetched first thing so no screen is drawn in a stand-in and redrawn (main.ts waits for it too). -->
+    <link rel="preload" href="/fonts/dohyeon-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/images/branding/shula-lab-logo.png" as="image" />
+    <script src="/assets/warfront-60fps-cap.js"></script>
+    <script type="module" crossorigin src="/assets/main-CrY4vNwI.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/main-WlkFcAEW.css">
+  <style id="warfront-mobile-viewport">
+html,body,#app{width:100%;height:100%;min-height:100%;margin:0;padding:0;overflow:hidden;overscroll-behavior:none}
+html,body{position:fixed;inset:0;background:#101923}
+#app{position:absolute;inset:0}
+canvas{touch-action:none}
+</style>
+
+</head>
+  <body>
+    <div id="app"><div style="position:fixed;inset:0;background:#101923;color:white;display:grid;place-content:center;justify-items:center;gap:16px"><svg aria-label="WarFront" width="320" viewBox="0 0 490.1 41.3" fill="white" fill-rule="evenodd"><path transform="translate(0)" d="M0 0H13L19 26.6L30.8 10.4L42.6 27L48.2 0H61.2L53.2 41.2H40.6L30.8 27.6L20.8 41.2H7.6Z"/><path transform="translate(65.6)" d="M24.2 0H37.2L61 41.2H46.2L30.8 15.4L15.2 41.2H0Z"/><path transform="translate(131.3)" d="M0 0H44.9A11 10 0 0 1 55.9 10V21A8.2 8.2 0 0 1 48.6 29.1L55.9 41.2H40.5L32.5 29.8H12.8V41.2H0ZM12.9 10H39.5A3.4 3.4 0 0 1 42.9 13.4V16.9A3.4 3.4 0 0 1 39.5 20.3H12.9Z"/><path transform="translate(191.6)" d="M0 0H56.5V9.7H0ZM0 16.3H56.5V25.3H12.8V41.2H0Z"/><path transform="translate(252.2)" d="M0 0H44.9A11 10 0 0 1 55.9 10V21A8.2 8.2 0 0 1 48.6 29.1L55.9 41.2H40.5L32.5 29.8H12.8V41.2H0ZM12.9 10H39.5A3.4 3.4 0 0 1 42.9 13.4V16.9A3.4 3.4 0 0 1 39.5 20.3H12.9Z"/><path transform="translate(312.3)" d="M11 0H45.8A11 10.5 0 0 1 56.8 10.5V30.8A11 10.5 0 0 1 45.8 41.3H11A11 10.5 0 0 1 0 30.8V10.5A11 10.5 0 0 1 11 0ZM18.3 9.7H37.7A3.5 3.5 0 0 1 41.2 13.2V27.9A3.5 3.5 0 0 1 37.7 31.4H18.3A3.5 3.5 0 0 1 14.8 27.9V13.2A3.5 3.5 0 0 1 18.3 9.7Z"/><path transform="translate(373.2)" d="M0 0H44.6A11.5 10 0 0 1 56.1 10V41.2H43.2V15A5.5 5.3 0 0 0 37.7 9.7H13V41.2H0Z"/><path transform="translate(433.8)" d="M0 0H56.3V9.7H34.8V41.2H21.6V9.7H0Z"/></svg><small style="font:12px sans-serif;letter-spacing:.22em">LOADING</small></div></div>
+  </body>
+</html>

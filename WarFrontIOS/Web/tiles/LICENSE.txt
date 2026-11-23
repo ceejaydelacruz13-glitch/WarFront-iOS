@@ -1,0 +1,5 @@
+Tree sprites in this folder
+
+  trees-top.png  one row of ten trees seen from above, the sheet the game draws, frames
+                 listed in src/render/tiles.ts. Original to this project: drawn by
+                 scripts/build-trees.mjs, no outside art.

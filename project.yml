@@ -1,0 +1,41 @@
+name: WarFrontIOS
+options:
+  bundleIdPrefix: com.warfront
+settings:
+  base:
+    SWIFT_VERSION: 5.0
+    IPHONEOS_DEPLOYMENT_TARGET: '16.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    CODE_SIGN_STYLE: Manual
+    ENABLE_BITCODE: NO
+    GENERATE_INFOPLIST_FILE: NO
+    INFOPLIST_KEY_UIRequiresFullScreen: YES
+    INFOPLIST_KEY_UILaunchScreen_Generation: YES
+    INFOPLIST_KEY_UIStatusBarHidden: YES
+    INFOPLIST_KEY_UIViewControllerBasedStatusBarAppearance: NO
+    INFOPLIST_KEY_UISupportedInterfaceOrientations: [UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+    INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking: YES
+    ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: NO
+targets:
+  WarFrontIOS:
+    type: application
+    platform: iOS
+    deploymentTarget: '16.0'
+    sources:
+      - path: WarFrontIOS/WarFrontApp.swift
+      - path: WarFrontIOS/LocalWebServer.swift
+      - path: WarFrontIOS/Info.plist
+        buildPhase: none
+      - path: WarFrontIOS/Web
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.warfront.ioswrapper
+        INFOPLIST_FILE: WarFrontIOS/Info.plist
+        PRODUCT_NAME: WarFront
+        SWIFT_VERSION: 5.0
+        INFOPLIST_KEY_CFBundleDisplayName: WarFront
+        INFOPLIST_KEY_UIRequiresFullScreen: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: [UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        INFOPLIST_KEY_NSAppTransportSecurity_NSAllowsLocalNetworking: YES
